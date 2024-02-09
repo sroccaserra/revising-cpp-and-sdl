@@ -25,7 +25,21 @@ int main() {
     SDL_FillRect(screenSurface, nullptr, bgColor);
     SDL_UpdateWindowSurface(window);
 
-    SDL_Delay(2000);
+    SDL_Event event;
+    bool shouldQuit = false;
+    while (!shouldQuit) {
+        while(SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                case SDL_KEYDOWN:
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_WINDOWEVENT_CLOSE:
+                    shouldQuit = true;
+            }
+        }
+        SDL_Delay(100);
+    }
+
     SDL_DestroyWindow(window);
     SDL_Quit();
 
