@@ -2,7 +2,6 @@
 #define __STATE_H__
 
 #include <SDL2/SDL.h>
-#include <iostream>
 
 class State {
     public:

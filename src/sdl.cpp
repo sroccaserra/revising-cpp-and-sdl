@@ -1,5 +1,5 @@
-#include <SDL2/SDL.h>
 #include <iostream>
+#include <SDL2/SDL.h>
 
 #include "State.h"
 
@@ -15,7 +15,8 @@ int main() {
     try {
         run();
     }
-    catch(std::exception& e) {
+    catch(std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
         result = 1;
     }
 
@@ -25,10 +26,6 @@ int main() {
 
 void run() {
     State state(480, 270);
-    if (state.shouldQuit) {
-        throw std::exception();
-    }
-
     state.draw();
 
     SDL_Event event;

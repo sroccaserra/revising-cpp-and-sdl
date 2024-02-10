@@ -1,9 +1,7 @@
-
+#include <sstream>
 #include <SDL2/SDL.h>
-#include <iostream>
 
 #include "State.h"
-
 
 State::State(int w, int h) : shouldQuit{false} {
     window = SDL_CreateWindow(
@@ -12,9 +10,8 @@ State::State(int w, int h) : shouldQuit{false} {
             w, h,
             SDL_WINDOW_SHOWN);
     if (window == nullptr) {
-        std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
-        shouldQuit = true;
-        return;
+        auto msg = (std::ostringstream() << "Could not create window" << SDL_GetError()).str();
+        throw std::runtime_error(msg);
     }
 
     screenSurface = SDL_GetWindowSurface(window);
