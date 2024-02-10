@@ -1,19 +1,18 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 270
-
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
         return 1;
     }
 
+    constexpr int windowWidth {480};
+    constexpr int windowHeight {270};
     auto* const window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            SCREEN_WIDTH, SCREEN_HEIGHT,
+            windowWidth, windowHeight,
             SDL_WINDOW_SHOWN);
     if (window == nullptr) {
         std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
