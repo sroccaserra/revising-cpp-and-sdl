@@ -1,7 +1,11 @@
-#include <iostream>
-#include <SDL2/SDL.h>
+module;
 
-class State {
+#include <SDL2/SDL.h>
+#include <iostream>
+
+export module State;
+
+export class State {
     public:
         State(int w, int h);
         ~State();

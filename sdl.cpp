@@ -1,6 +1,6 @@
-#include <iostream>
 #include <SDL2/SDL.h>
-#include "State.h"
+
+import State;
 
 int main() {
     {
