@@ -6,5 +6,7 @@ LDLIBS=$(shell sdl2-config --libs)
 run: sdl
 	./sdl
 
+sdl: State.h
+
 clean:
 	rm -f sdl
