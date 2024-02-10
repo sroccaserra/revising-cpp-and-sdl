@@ -10,7 +10,7 @@ int main() {
         return 1;
     }
 
-    SDL_Window* const window = SDL_CreateWindow(
+    auto* const window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -20,9 +20,9 @@ int main() {
         return 1;
     }
 
-    SDL_Surface* const screenSurface = SDL_GetWindowSurface(window);
-    const Uint32 bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
-    SDL_FillRect(screenSurface, nullptr, bgColor);
+    auto* const surface = SDL_GetWindowSurface(window);
+    const Uint32 bgColor {SDL_MapRGB(surface->format, 255, 255, 255)};
+    SDL_FillRect(surface, nullptr, bgColor);
     SDL_UpdateWindowSurface(window);
 
     SDL_Event event;
