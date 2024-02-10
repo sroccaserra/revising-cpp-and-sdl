@@ -24,6 +24,18 @@ State::~State() {
     }
 }
 
+void State::run() {
+    draw();
+
+    SDL_Event event;
+    while (!shouldQuit) {
+        while(SDL_PollEvent(&event)) {
+            update(event);
+        }
+        SDL_Delay(100);
+    }
+}
+
 void State::draw() {
     SDL_FillRect(screenSurface, nullptr, bgColor);
     SDL_UpdateWindowSurface(window);

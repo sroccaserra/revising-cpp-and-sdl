@@ -3,8 +3,6 @@
 
 #include "State.h"
 
-void run();
-
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
@@ -13,7 +11,8 @@ int main() {
 
     int result {0};
     try {
-        run();
+        State state(480, 270);
+        state.run();
     }
     catch(std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
@@ -22,17 +21,4 @@ int main() {
 
     SDL_Quit();
     return result;
-}
-
-void run() {
-    State state(480, 270);
-    state.draw();
-
-    SDL_Event event;
-    while (!state.shouldQuit) {
-        while(SDL_PollEvent(&event)) {
-            state.update(event);
-        }
-        SDL_Delay(100);
-    }
 }
