@@ -10,7 +10,7 @@ int main() {
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow(
+    auto window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -20,13 +20,13 @@ int main() {
         return 1;
     }
 
-    SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
-    const Uint32 bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
+    auto screenSurface = SDL_GetWindowSurface(window);
+    const auto bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
     SDL_FillRect(screenSurface, nullptr, bgColor);
     SDL_UpdateWindowSurface(window);
 
     SDL_Event event;
-    bool shouldQuit = false;
+    bool shouldQuit {false};
     while (!shouldQuit) {
         while(SDL_PollEvent(&event)) {
             switch (event.type) {
