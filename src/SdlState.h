@@ -3,10 +3,10 @@
 
 #include <SDL2/SDL.h>
 
-class State {
+class SdlState {
     public:
-        State(int w, int h);
-        ~State();
+        SdlState(int w, int h);
+        ~SdlState();
         void run();
 
     private:

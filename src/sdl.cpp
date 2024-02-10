@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-#include "State.h"
+#include "SdlState.h"
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -11,8 +11,8 @@ int main() {
 
     int result {0};
     try {
-        State state(480, 270);
-        state.run();
+        SdlState sdlState(480, 270);
+        sdlState.run();
     }
     catch(std::runtime_error& e) {
         std::cerr << e.what() << std::endl;

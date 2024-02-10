@@ -1,9 +1,9 @@
 #include <sstream>
 #include <SDL2/SDL.h>
 
-#include "State.h"
+#include "SdlState.h"
 
-State::State(int w, int h) : shouldQuit{false} {
+SdlState::SdlState(int w, int h) : shouldQuit{false} {
     window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -18,13 +18,13 @@ State::State(int w, int h) : shouldQuit{false} {
     bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
 }
 
-State::~State() {
+SdlState::~SdlState() {
     if (window != nullptr) {
         SDL_DestroyWindow(window);
     }
 }
 
-void State::run() {
+void SdlState::run() {
     draw();
 
     SDL_Event event;
@@ -36,12 +36,12 @@ void State::run() {
     }
 }
 
-void State::draw() {
+void SdlState::draw() {
     SDL_FillRect(screenSurface, nullptr, bgColor);
     SDL_UpdateWindowSurface(window);
 }
 
-void State::update(const SDL_Event& event) {
+void SdlState::update(const SDL_Event& event) {
     switch (event.type) {
         case SDL_QUIT:
         case SDL_KEYDOWN:
