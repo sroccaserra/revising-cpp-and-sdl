@@ -1,32 +1,48 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-struct State {
-    SDL_Window* window;
-    SDL_Surface* screenSurface;
+class State {
+    public:
+        State(int w, int h) : w{w}, h{h}, shouldQuit{false} {}
 
-    int w;
-    int h;
-    Uint32 bgColor;
-    bool shouldQuit;
+        void draw() {
+            SDL_FillRect(screenSurface, nullptr, bgColor);
+            SDL_UpdateWindowSurface(window);
+        }
+
+        void update(const SDL_Event& event) {
+            switch (event.type) {
+                case SDL_QUIT:
+                case SDL_KEYDOWN:
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_WINDOWEVENT_CLOSE:
+                    shouldQuit = true;
+            }
+        }
+
+        SDL_Window* window;
+        SDL_Surface* screenSurface;
+        Uint32 bgColor;
+
+        int w;
+        int h;
+        bool shouldQuit;
 };
 
-bool initState(State& state, int w, int h);
-void drawOn(const State& state);
-void update(State& state, const SDL_Event& event);
+bool initState(State& state);
 
 int main() {
-    State state;
-    if (!initState(state, 480, 270)) {
+    State state(480, 270);
+    if (!initState(state)) {
         return 1;
     }
 
-    drawOn(state);
+    state.draw();
 
     SDL_Event event;
     while (!state.shouldQuit) {
         while(SDL_PollEvent(&event)) {
-            update(state, event);
+            state.update(event);
         }
         SDL_Delay(100);
     }
@@ -37,7 +53,7 @@ int main() {
     return 0;
 }
 
-bool initState(State& state, int w, int h) {
+bool initState(State& state) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
         return false;
@@ -46,7 +62,7 @@ bool initState(State& state, int w, int h) {
     state.window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            w, h,
+            state.w, state.h,
             SDL_WINDOW_SHOWN);
     if (state.window == nullptr) {
         std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
@@ -54,25 +70,7 @@ bool initState(State& state, int w, int h) {
     }
 
     state.screenSurface = SDL_GetWindowSurface(state.window);
-    state.w = w;
-    state.h = h;
     state.bgColor = SDL_MapRGB(state.screenSurface->format, 255, 255, 255);
-    state.shouldQuit = false;
 
     return true;
-}
-
-void drawOn(const State& state) {
-    SDL_FillRect(state.screenSurface, nullptr, state.bgColor);
-    SDL_UpdateWindowSurface(state.window);
-}
-
-void update(State& state, const SDL_Event& event) {
-    switch (event.type) {
-        case SDL_QUIT:
-        case SDL_KEYDOWN:
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_WINDOWEVENT_CLOSE:
-            state.shouldQuit = true;
-    }
 }
