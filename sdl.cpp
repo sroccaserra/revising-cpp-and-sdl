@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 
 SDL_Window* initWindow(int w, int h);
+void draw(SDL_Window* const window);
 
 int main() {
     auto* const window = initWindow(480, 270);
@@ -9,10 +10,7 @@ int main() {
         return 1;
     }
 
-    auto* const surface = SDL_GetWindowSurface(window);
-    const Uint32 bgColor {SDL_MapRGB(surface->format, 255, 255, 255)};
-    SDL_FillRect(surface, nullptr, bgColor);
-    SDL_UpdateWindowSurface(window);
+    draw(window);
 
     SDL_Event event;
     bool shouldQuit {false};
@@ -52,4 +50,11 @@ SDL_Window* initWindow(int w, int h) {
     }
 
     return window;
+}
+
+void draw(SDL_Window* const window) {
+    auto* const surface = SDL_GetWindowSurface(window);
+    const Uint32 bgColor {SDL_MapRGB(surface->format, 255, 255, 255)};
+    SDL_FillRect(surface, nullptr, bgColor);
+    SDL_UpdateWindowSurface(window);
 }
