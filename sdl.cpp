@@ -8,10 +8,12 @@ struct State {
     int w;
     int h;
     Uint32 bgColor;
+    bool shouldQuit;
 };
 
 bool initState(State& state, int w, int h);
 void drawOn(const State& state);
+void update(State& state, const SDL_Event& event);
 
 int main() {
     State state;
@@ -22,16 +24,9 @@ int main() {
     drawOn(state);
 
     SDL_Event event;
-    bool shouldQuit {false};
-    while (!shouldQuit) {
+    while (!state.shouldQuit) {
         while(SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                case SDL_KEYDOWN:
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_WINDOWEVENT_CLOSE:
-                    shouldQuit = true;
-            }
+            update(state, event);
         }
         SDL_Delay(100);
     }
@@ -62,6 +57,7 @@ bool initState(State& state, int w, int h) {
     state.w = w;
     state.h = h;
     state.bgColor = SDL_MapRGB(state.screenSurface->format, 255, 255, 255);
+    state.shouldQuit = false;
 
     return true;
 }
@@ -69,4 +65,14 @@ bool initState(State& state, int w, int h) {
 void drawOn(const State& state) {
     SDL_FillRect(state.screenSurface, nullptr, state.bgColor);
     SDL_UpdateWindowSurface(state.window);
+}
+
+void update(State& state, const SDL_Event& event) {
+    switch (event.type) {
+        case SDL_QUIT:
+        case SDL_KEYDOWN:
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_WINDOWEVENT_CLOSE:
+            state.shouldQuit = true;
+    }
 }
