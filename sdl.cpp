@@ -3,11 +3,28 @@
 
 class State {
     public:
-        State(int w, int h) : w{w}, h{h}, shouldQuit{false} {}
+        State(int w, int h) : shouldQuit{false}, w{w}, h{h} {}
 
-        void init() {
+        bool initialize() {
+            if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+                std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
+                return false;
+            }
+
+            window = SDL_CreateWindow(
+                    "SDL window",
+                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                    w, h,
+                    SDL_WINDOW_SHOWN);
+            if (window == nullptr) {
+                std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
+                return false;
+            }
+
             screenSurface = SDL_GetWindowSurface(window);
             bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
+
+            return true;
         }
 
         void draw() {
@@ -25,22 +42,21 @@ class State {
             }
         }
 
-        SDL_Window* window;
 
-        int w;
-        int h;
+        SDL_Window* window;
         bool shouldQuit;
 
     private:
         SDL_Surface* screenSurface;
         Uint32 bgColor;
-};
 
-bool initState(State& state);
+        int w;
+        int h;
+};
 
 int main() {
     State state(480, 270);
-    if (!initState(state)) {
+    if (!state.initialize()) {
         return 1;
     }
 
@@ -58,25 +74,4 @@ int main() {
     SDL_Quit();
 
     return 0;
-}
-
-bool initState(State& state) {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    state.window = SDL_CreateWindow(
-            "SDL window",
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            state.w, state.h,
-            SDL_WINDOW_SHOWN);
-    if (state.window == nullptr) {
-        std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    state.init();
-
-    return true;
 }
