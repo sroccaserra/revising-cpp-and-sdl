@@ -1,16 +1,25 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-SDL_Window* initWindow(int w, int h);
-void draw(SDL_Window* const window);
+struct State {
+    SDL_Window* window;
+    SDL_Surface* screenSurface;
+
+    int w;
+    int h;
+    Uint32 bgColor;
+};
+
+bool initState(State& state, int w, int h);
+void drawOn(const State& state);
 
 int main() {
-    auto* const window = initWindow(480, 270);
-    if (window == nullptr) {
+    State state;
+    if (!initState(state, 480, 270)) {
         return 1;
     }
 
-    draw(window);
+    drawOn(state);
 
     SDL_Event event;
     bool shouldQuit {false};
@@ -27,34 +36,37 @@ int main() {
         SDL_Delay(100);
     }
 
-    SDL_DestroyWindow(window);
+    SDL_DestroyWindow(state.window);
     SDL_Quit();
 
     return 0;
 }
 
-SDL_Window* initWindow(int w, int h) {
+bool initState(State& state, int w, int h) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
-        return nullptr;
+        return false;
     }
 
-    auto* const window = SDL_CreateWindow(
+    state.window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             w, h,
             SDL_WINDOW_SHOWN);
-    if (window == nullptr) {
+    if (state.window == nullptr) {
         std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
-        return nullptr;
+        return false;
     }
 
-    return window;
+    state.screenSurface = SDL_GetWindowSurface(state.window);
+    state.w = w;
+    state.h = h;
+    state.bgColor = SDL_MapRGB(state.screenSurface->format, 255, 255, 255);
+
+    return true;
 }
 
-void draw(SDL_Window* const window) {
-    auto* const surface = SDL_GetWindowSurface(window);
-    const Uint32 bgColor {SDL_MapRGB(surface->format, 255, 255, 255)};
-    SDL_FillRect(surface, nullptr, bgColor);
-    SDL_UpdateWindowSurface(window);
+void drawOn(const State& state) {
+    SDL_FillRect(state.screenSurface, nullptr, state.bgColor);
+    SDL_UpdateWindowSurface(state.window);
 }
