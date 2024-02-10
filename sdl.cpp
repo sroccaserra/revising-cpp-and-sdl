@@ -5,6 +5,11 @@ class State {
     public:
         State(int w, int h) : w{w}, h{h}, shouldQuit{false} {}
 
+        void init() {
+            screenSurface = SDL_GetWindowSurface(window);
+            bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
+        }
+
         void draw() {
             SDL_FillRect(screenSurface, nullptr, bgColor);
             SDL_UpdateWindowSurface(window);
@@ -21,12 +26,14 @@ class State {
         }
 
         SDL_Window* window;
-        SDL_Surface* screenSurface;
-        Uint32 bgColor;
 
         int w;
         int h;
         bool shouldQuit;
+
+    private:
+        SDL_Surface* screenSurface;
+        Uint32 bgColor;
 };
 
 bool initState(State& state);
@@ -69,8 +76,7 @@ bool initState(State& state) {
         return false;
     }
 
-    state.screenSurface = SDL_GetWindowSurface(state.window);
-    state.bgColor = SDL_MapRGB(state.screenSurface->format, 255, 255, 255);
+    state.init();
 
     return true;
 }
