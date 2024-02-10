@@ -1,24 +1,9 @@
-module;
 
 #include <SDL2/SDL.h>
 #include <iostream>
 
-export module State;
+#include "State.h"
 
-export class State {
-    public:
-        State(int w, int h);
-        ~State();
-        void draw();
-        void update(const SDL_Event& event);
-
-        SDL_Window* window;
-        bool shouldQuit;
-
-    private:
-        SDL_Surface* screenSurface;
-        Uint32 bgColor;
-};
 
 State::State(int w, int h) : shouldQuit{false} {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
