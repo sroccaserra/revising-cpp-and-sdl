@@ -3,8 +3,8 @@
 
 class State {
     public:
-        State(int w, int h) : shouldQuit{false}, w{w}, h{h} {}
-        bool initialize();
+        State(int w, int h);
+        ~State();
         void draw();
         void update(const SDL_Event& event);
 
@@ -14,14 +14,13 @@ class State {
     private:
         SDL_Surface* screenSurface;
         Uint32 bgColor;
-        int w;
-        int h;
 };
 
-bool State::initialize() {
+State::State(int w, int h) : shouldQuit{false} {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
-        return false;
+        shouldQuit = true;
+        return;
     }
 
     window = SDL_CreateWindow(
@@ -31,13 +30,18 @@ bool State::initialize() {
             SDL_WINDOW_SHOWN);
     if (window == nullptr) {
         std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
-        return false;
+        shouldQuit = true;
+        return;
     }
 
     screenSurface = SDL_GetWindowSurface(window);
     bgColor = SDL_MapRGB(screenSurface->format, 255, 255, 255);
+}
 
-    return true;
+State::~State() {
+    if (window != nullptr) {
+        SDL_DestroyWindow(window);
+    }
 }
 
 void State::draw() {
