@@ -3,10 +3,10 @@ CPPFLAGS=$(shell sdl2-config --cflags)
 CXXFLAGS=-std=c++20 -Wall -pedantic
 LDLIBS=$(shell sdl2-config --libs)
 
-run: sdl
-	./sdl
+run: src/sdl
+	src/sdl
 
-sdl: State.o
+src/sdl: src/State.o
 
 clean:
-	rm -f sdl *.o
+	rm -f src/sdl src/*.o
