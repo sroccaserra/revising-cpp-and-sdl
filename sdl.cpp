@@ -1,21 +1,11 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-int main() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
-        return 1;
-    }
+SDL_Window* initWindow(int w, int h);
 
-    constexpr int windowWidth {480};
-    constexpr int windowHeight {270};
-    auto* const window = SDL_CreateWindow(
-            "SDL window",
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            windowWidth, windowHeight,
-            SDL_WINDOW_SHOWN);
+int main() {
+    auto* const window = initWindow(480, 270);
     if (window == nullptr) {
-        std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
         return 1;
     }
 
@@ -43,4 +33,23 @@ int main() {
     SDL_Quit();
 
     return 0;
+}
+
+SDL_Window* initWindow(int w, int h) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
+        return nullptr;
+    }
+
+    auto* const window = SDL_CreateWindow(
+            "SDL window",
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            w, h,
+            SDL_WINDOW_SHOWN);
+    if (window == nullptr) {
+        std::cerr << "Could not create window: " << SDL_GetError() << std::endl;
+        return nullptr;
+    }
+
+    return window;
 }
