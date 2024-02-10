@@ -6,12 +6,6 @@
 
 
 State::State(int w, int h) : shouldQuit{false} {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
-        shouldQuit = true;
-        return;
-    }
-
     window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,

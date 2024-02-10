@@ -4,6 +4,11 @@
 #include "State.h"
 
 int main() {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
+        return 1;
+    }
+
     {
         State state(480, 270);
         if (state.shouldQuit) {
