@@ -13,6 +13,10 @@ SDL:
 - <https://fr.wikibooks.org/wiki/Programmation_avec_la_SDL>
 - <https://lazyfoo.net/tutorials/SDL/index.php>
 
+SDL\_Image (not used atm):
+
+- package name is libsdl2-image-dev
+
 C++:
 
 - <https://isocpp.org/>

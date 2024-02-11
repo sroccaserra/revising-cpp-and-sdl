@@ -17,14 +17,27 @@ SdlState::SdlState(int w, int h) : shouldQuit{false}, bgColor{63, 63, 63} {
     const int rendererFlags {SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC};
     renderer = SDL_CreateRenderer(window, -1, rendererFlags);
     if (renderer == nullptr) {
-        SDL_DestroyWindow(window);
-
+        cleanUpSDL();
         auto msg = (std::ostringstream() << "Could not create renderer, " << SDL_GetError()).str();
         throw std::runtime_error(msg);
     }
+
+    auto sheetPath = "images/sheet.bmp";
+    auto image = SDL_LoadBMP(sheetPath);
+    if (image == nullptr) {
+        cleanUpSDL();
+        auto msg = (std::ostringstream() << SDL_GetError()).str();
+        throw std::runtime_error(msg);
+    }
+    sheet = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
 }
 
 SdlState::~SdlState() {
+    cleanUpSDL();
+}
+
+void SdlState::cleanUpSDL() {
     if (renderer != nullptr) {
         SDL_DestroyRenderer(renderer);
     }
@@ -48,6 +61,11 @@ void SdlState::run() {
 void SdlState::draw() {
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
     SDL_RenderClear(renderer);
+
+    SDL_Rect dst {0, 0, 0, 0};
+    SDL_QueryTexture(sheet, nullptr, nullptr, &dst.w, &dst.h);
+    SDL_RenderCopy(renderer, sheet, nullptr, &dst);
+
     SDL_RenderPresent(renderer);
 }
 

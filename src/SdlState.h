@@ -12,9 +12,11 @@ class SdlState {
     private:
         void draw();
         void update(const SDL_Event& event);
+        void cleanUpSDL();
 
         SDL_Window* window;
         SDL_Renderer* renderer;
+        SDL_Texture* sheet;
         bool shouldQuit;
         Uint8 bgColor[3];
 };
