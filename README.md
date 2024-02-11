@@ -24,3 +24,7 @@ C++:
 - <https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines>
 - <https://github.com/isocpp/CppCoreGuidelines>
 - <https://www.informit.com/store/tour-of-c-plus-plus-9780136816485>
+
+Font:
+
+- <https://en.wikipedia.org/wiki/Atari_ST_character_set>

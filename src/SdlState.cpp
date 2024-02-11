@@ -26,7 +26,7 @@ SdlState::SdlState(int w, int h, int zoom)
     framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, w, h);
 
-    auto sheetPath = "images/sheet.bmp";
+    auto sheetPath = "images/Atari_ST_character_set_8x8.bmp";
     auto image = SDL_LoadBMP(sheetPath);
     if (image == nullptr) {
         cleanUpSDL();
@@ -74,9 +74,10 @@ void SdlState::draw() {
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
     SDL_RenderClear(renderer);
 
-    SDL_Rect dst {0, 0, 0, 0};
-    SDL_QueryTexture(sheet, nullptr, nullptr, &dst.w, &dst.h);
-    SDL_RenderCopy(renderer, sheet, nullptr, &dst);
+    SDL_Rect src {8, 32, 8, 8};
+    SDL_Rect dst {(w+8)/2, (h+8)/2, 8, 8};
+    // SDL_QueryTexture(sheet, nullptr, nullptr, &dst.w, &dst.h);
+    SDL_RenderCopy(renderer, sheet, &src, &dst);
 
     // Render buffer
     SDL_SetRenderTarget(renderer, nullptr);
