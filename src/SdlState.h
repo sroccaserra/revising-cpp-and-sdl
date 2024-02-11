@@ -14,9 +14,9 @@ class SdlState {
         void update(const SDL_Event& event);
 
         SDL_Window* window;
-        SDL_Surface* screenSurface;
-        Uint32 bgColor;
+        SDL_Renderer* renderer;
         bool shouldQuit;
+        Uint8 bgColor[3];
 };
 
 #endif // __STATE_H__
