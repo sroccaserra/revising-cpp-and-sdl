@@ -4,7 +4,7 @@
 #include "SdlState.h"
 
 int main() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Could not initialize SDL: " << SDL_GetError() << std::endl;
         return 1;
     }

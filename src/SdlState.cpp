@@ -35,6 +35,9 @@ SdlState::SdlState(int w, int h, int zoom)
     }
     sheet = SDL_CreateTextureFromSurface(renderer, image);
     SDL_FreeSurface(image);
+
+    pos_x = (w+8)/2;
+    pos_y = (h+8)/2;
 }
 
 SdlState::~SdlState() {
@@ -57,14 +60,31 @@ void SdlState::cleanUpSDL() {
 }
 
 void SdlState::run() {
-    draw();
-
-    SDL_Event event;
     while (!shouldQuit) {
-        while(SDL_PollEvent(&event)) {
-            update(event);
+        processInput();
+        update();
+        draw();
+    }
+}
+
+void SdlState::processInput() {
+    SDL_Event event;
+    while(SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+            case SDL_KEYDOWN:
+            case SDL_MOUSEBUTTONDOWN:
+            case SDL_WINDOWEVENT_CLOSE:
+                shouldQuit = true;
+                break;
         }
-        SDL_Delay(100);
+    }
+}
+
+void SdlState::update() {
+    pos_x += 1;
+    if (w <= pos_x) {
+        pos_x = -8;
     }
 }
 
@@ -75,7 +95,7 @@ void SdlState::draw() {
     SDL_RenderClear(renderer);
 
     SDL_Rect src {8, 32, 8, 8};
-    SDL_Rect dst {(w+8)/2, (h+8)/2, 8, 8};
+    SDL_Rect dst {pos_x, pos_y, 8, 8};
     // SDL_QueryTexture(sheet, nullptr, nullptr, &dst.w, &dst.h);
     SDL_RenderCopy(renderer, sheet, &src, &dst);
 
@@ -85,14 +105,4 @@ void SdlState::draw() {
     SDL_RenderCopy(renderer, framebuffer, nullptr, &windowDst);
 
     SDL_RenderPresent(renderer);
-}
-
-void SdlState::update(const SDL_Event& event) {
-    switch (event.type) {
-        case SDL_QUIT:
-        case SDL_KEYDOWN:
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_WINDOWEVENT_CLOSE:
-            shouldQuit = true;
-    }
 }

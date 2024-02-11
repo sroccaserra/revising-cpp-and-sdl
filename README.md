@@ -11,8 +11,9 @@ SDL:
 - <https://www.libsdl.org/>
 - <https://wiki.libsdl.org/SDL2/FrontPage>
 - <https://fr.wikibooks.org/wiki/Programmation_avec_la_SDL>
-- <https://lazyfoo.net/tutorials/SDL/index.php>
 - <https://git.sr.ht/~rabbits/uxn/tree/main/item/src/uxnemu.c>
+- <https://github.com/gustavopezzi/sdl-gameloop>
+- <https://lazyfoo.net/tutorials/SDL/index.php>
 
 SDL\_Image (not used atm):
 
