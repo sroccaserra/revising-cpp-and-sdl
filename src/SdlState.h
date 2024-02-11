@@ -5,7 +5,7 @@
 
 class SdlState {
     public:
-        SdlState(int w, int h);
+        SdlState(int w, int h, int zoom);
         ~SdlState();
         void run();
 
@@ -16,9 +16,13 @@ class SdlState {
 
         SDL_Window* window;
         SDL_Renderer* renderer;
+        SDL_Texture* framebuffer;
         SDL_Texture* sheet;
         bool shouldQuit;
         Uint8 bgColor[3];
+        int w;
+        int h;
+        int zoom;
 };
 
 #endif // __STATE_H__

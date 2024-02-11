@@ -11,7 +11,7 @@ int main() {
 
     int result {0};
     try {
-        SdlState sdlState(480, 270);
+        SdlState sdlState(480, 270, 3);
         sdlState.run();
     }
     catch(std::runtime_error& e) {
