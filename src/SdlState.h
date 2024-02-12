@@ -14,6 +14,7 @@ class SdlState {
         void update();
         void draw();
         void cleanUpSDL();
+        const Uint32 readFirstPixel(SDL_Surface* surface) const;
 
         SDL_Window* window;
         SDL_Renderer* renderer;
