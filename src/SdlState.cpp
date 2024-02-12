@@ -26,21 +26,21 @@ SdlState::SdlState(int w, int h, int zoom)
     renderer = SDL_CreateRenderer(window, -1, rendererFlags);
     if (renderer == nullptr) {
         cleanUpSDL();
-        auto msg = (std::ostringstream() << "Could not create renderer, " << SDL_GetError()).str();
+        const auto msg = (std::ostringstream() << "Could not create renderer, " << SDL_GetError()).str();
         throw std::runtime_error(msg);
     }
 
     framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, w, h);
 
-    auto sheetPath = "images/Atari_ST_character_set_8x8.bmp";
-    auto image = SDL_LoadBMP(sheetPath);
+    const auto sheetPath = "images/Atari_ST_character_set_8x8.bmp";
+    const auto image = SDL_LoadBMP(sheetPath);
     if (image == nullptr) {
         cleanUpSDL();
-        auto msg = (std::ostringstream() << SDL_GetError()).str();
+        const auto msg = (std::ostringstream() << SDL_GetError()).str();
         throw std::runtime_error(msg);
     }
-    const Uint32 firstPixel = readFirstPixel(image);
+    const auto firstPixel = readFirstPixel(image);
     SDL_SetColorKey(image, SDL_TRUE, firstPixel);
     sheet = SDL_CreateTextureFromSurface(renderer, image);
     SDL_FreeSurface(image);
@@ -97,20 +97,20 @@ void SdlState::update() {
     }
 }
 
-void SdlState::draw() {
+void SdlState::draw() const {
     // Render to buffer
     SDL_SetRenderTarget(renderer, framebuffer);
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
     SDL_RenderClear(renderer);
 
-    SDL_Rect src {8, 32, 8, 8};
-    SDL_Rect dst {pos_x, pos_y, 8, 8};
+    const SDL_Rect src {8, 32, 8, 8};
+    const SDL_Rect dst {pos_x, pos_y, 8, 8};
     // SDL_QueryTexture(sheet, nullptr, nullptr, &dst.w, &dst.h);
     SDL_RenderCopy(renderer, sheet, &src, &dst);
 
     // Render buffer
     SDL_SetRenderTarget(renderer, nullptr);
-    SDL_Rect windowDst {0, 0, w*zoom, h*zoom};
+    const SDL_Rect windowDst {0, 0, w*zoom, h*zoom};
     SDL_RenderCopy(renderer, framebuffer, nullptr, &windowDst);
 
     SDL_RenderPresent(renderer);
@@ -122,7 +122,7 @@ const Uint32 SdlState::readFirstPixel(SDL_Surface* surface) const {
     assert(format->palette != nullptr);
     assert(format->palette->ncolors <= 0xff);
     assert(format->BitsPerPixel == 8);
-    const Uint8 pixel = ((Uint8*)surface->pixels)[0];
+    const Uint8 pixel = static_cast<Uint8*>(surface->pixels)[0];
 
     SDL_Color color;
     SDL_GetRGBA(pixel, format, &color.r, &color.g, &color.b, &color.a);
