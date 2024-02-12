@@ -6,6 +6,12 @@
 
 SdlState::SdlState(int w, int h, int zoom)
     : shouldQuit{false} , bgColor{63, 63, 63} , w {w}, h {h}, zoom {zoom} {
+
+    if(0 == (SDL_WasInit(0) & SDL_INIT_VIDEO)) {
+        auto msg = (std::ostringstream() << "SDL was not initialized.").str();
+        throw std::runtime_error(msg);
+    }
+
     window = SDL_CreateWindow(
             "SDL window",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
