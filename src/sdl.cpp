@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-#include "SdlState.h"
+#include "SdlState.hpp"
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {

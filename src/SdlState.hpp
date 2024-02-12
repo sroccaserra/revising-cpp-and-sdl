@@ -1,5 +1,5 @@
-#ifndef __STATE_H__
-#define __STATE_H__
+#ifndef __STATE_HPP__
+#define __STATE_HPP__
 
 #include <SDL2/SDL.h>
 
@@ -30,4 +30,4 @@ class SdlState {
         int pos_y;
 };
 
-#endif // __STATE_H__
+#endif // __STATE_HPP__

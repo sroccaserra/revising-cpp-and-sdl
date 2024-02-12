@@ -2,7 +2,7 @@
 #include <cassert>
 #include <SDL2/SDL.h>
 
-#include "SdlState.h"
+#include "SdlState.hpp"
 
 SdlState::SdlState(int w, int h, int zoom)
     : shouldQuit{false} , bgColor{63, 63, 63} , w {w}, h {h}, zoom {zoom} {
