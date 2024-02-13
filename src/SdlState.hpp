@@ -28,8 +28,8 @@ class SdlState {
         SDL_Texture* framebuffer;
         SDL_Texture* sheet;
 
-        bool shouldQuit;
-        Uint8 bgColor[3];
+        bool shouldQuit {false};
+        Uint8 bgColor[3] {63, 63, 63};
         int sheetW;
         int sheetH;
         int w;

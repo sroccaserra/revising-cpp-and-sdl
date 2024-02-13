@@ -7,9 +7,7 @@
 constexpr int tileW {8};
 constexpr int tileH {8};
 
-SdlState::SdlState(int w, int h, int zoom)
-    : shouldQuit{false} , bgColor{63, 63, 63} , w {w}, h {h}, zoom {zoom} {
-
+SdlState::SdlState(int w, int h, int zoom) : w {w}, h {h}, zoom {zoom} {
     if(0 == (SDL_WasInit(0) & SDL_INIT_VIDEO)) {
         auto msg = (std::ostringstream() << "SDL was not initialized.").str();
         throw std::runtime_error(msg);
