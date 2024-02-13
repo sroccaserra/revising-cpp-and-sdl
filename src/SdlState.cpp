@@ -4,6 +4,9 @@
 
 #include "SdlState.hpp"
 
+constexpr int tileW {8};
+constexpr int tileH {8};
+
 SdlState::SdlState(int w, int h, int zoom)
     : shouldQuit{false} , bgColor{63, 63, 63} , w {w}, h {h}, zoom {zoom} {
 
@@ -45,8 +48,10 @@ SdlState::SdlState(int w, int h, int zoom)
     sheet = SDL_CreateTextureFromSurface(renderer, image);
     SDL_FreeSurface(image);
 
-    pos_x = (w+8)/2;
-    pos_y = (h+8)/2;
+    SDL_QueryTexture(sheet, nullptr, nullptr, &sheetW, &sheetH);
+
+    pos_x = (w+tileW)/2;
+    pos_y = (h+tileH)/2;
 }
 
 SdlState::~SdlState() {
@@ -93,8 +98,17 @@ void SdlState::processInput() {
 void SdlState::update() {
     pos_x += 1;
     if (w <= pos_x) {
-        pos_x = -8;
+        pos_x = -tileW;
     }
+}
+
+void SdlState::drawSprite(const int n, const float x, const float y) const {
+    const int sheetX = (n*tileW)%sheetW;
+    const int sheetY = tileH*n/(sheetW/tileW);
+
+    const SDL_Rect src {sheetX, sheetY, tileW, tileH};
+    const SDL_Rect dst {static_cast<int>(x), static_cast<int>(y), tileW, tileH};
+    SDL_RenderCopy(renderer, sheet, &src, &dst);
 }
 
 void SdlState::draw() const {
@@ -103,10 +117,7 @@ void SdlState::draw() const {
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
     SDL_RenderClear(renderer);
 
-    const SDL_Rect src {8, 32, 8, 8};
-    const SDL_Rect dst {pos_x, pos_y, 8, 8};
-    // SDL_QueryTexture(sheet, nullptr, nullptr, &dst.w, &dst.h);
-    SDL_RenderCopy(renderer, sheet, &src, &dst);
+    drawSprite(65, pos_x, pos_y);
 
     // Render buffer
     SDL_SetRenderTarget(renderer, nullptr);

@@ -13,6 +13,7 @@ class SdlState {
         void processInput();
         void update();
         void draw() const;
+        void drawSprite(const int n, const float x, const float y) const;
         void cleanUpSDL();
         const Uint32 readFirstPixel(SDL_Surface* surface) const;
 
@@ -23,11 +24,13 @@ class SdlState {
 
         bool shouldQuit;
         Uint8 bgColor[3];
+        int sheetW;
+        int sheetH;
         int w;
         int h;
         int zoom;
-        int pos_x;
-        int pos_y;
+        float pos_x;
+        float pos_y;
 };
 
 #endif // __STATE_HPP__
