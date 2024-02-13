@@ -12,7 +12,9 @@ class SdlState {
     private:
         void processInput();
         void update();
+        void drawSdl() const;
         void draw() const;
+        void cls() const {SDL_RenderClear(renderer);}
         void drawSprite(const int n, const float x, const float y) const;
         void cleanUpSDL();
         const Uint32 readFirstPixel(SDL_Surface* surface) const;

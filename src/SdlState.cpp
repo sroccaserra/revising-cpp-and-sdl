@@ -77,7 +77,7 @@ void SdlState::run() {
     while (!shouldQuit) {
         processInput();
         update();
-        draw();
+        drawSdl();
     }
 }
 
@@ -112,12 +112,16 @@ void SdlState::drawSprite(const int n, const float x, const float y) const {
 }
 
 void SdlState::draw() const {
+    cls();
+    drawSprite(65, pos_x, pos_y);
+}
+
+void SdlState::drawSdl() const {
     // Render to buffer
     SDL_SetRenderTarget(renderer, framebuffer);
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
-    SDL_RenderClear(renderer);
 
-    drawSprite(65, pos_x, pos_y);
+    draw();
 
     // Render buffer
     SDL_SetRenderTarget(renderer, nullptr);
