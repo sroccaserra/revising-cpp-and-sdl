@@ -10,13 +10,17 @@ class SdlState {
         void run();
 
     private:
-        void processInput();
+        // Could be user defined
         void update();
-        void drawSdl() const;
         void draw() const;
+        // Could be an API available to user
         void cls() const {SDL_RenderClear(renderer);}
         void drawSprite(const int n, const float x, const float y) const;
-        void cleanUpSDL();
+
+        // Needed by SDL
+        void processInput();
+        void drawSdl() const;
+        void cleanUpSdl();
         const Uint32 readFirstPixel(SDL_Surface* surface) const;
 
         SDL_Window* window;

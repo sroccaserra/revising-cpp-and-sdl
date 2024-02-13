@@ -28,7 +28,7 @@ SdlState::SdlState(int w, int h, int zoom)
     const int rendererFlags {SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC};
     renderer = SDL_CreateRenderer(window, -1, rendererFlags);
     if (renderer == nullptr) {
-        cleanUpSDL();
+        cleanUpSdl();
         const auto msg = (std::ostringstream() << "Could not create renderer, " << SDL_GetError()).str();
         throw std::runtime_error(msg);
     }
@@ -39,7 +39,7 @@ SdlState::SdlState(int w, int h, int zoom)
     const auto sheetPath = "images/Atari_ST_character_set_8x8.bmp";
     const auto image = SDL_LoadBMP(sheetPath);
     if (image == nullptr) {
-        cleanUpSDL();
+        cleanUpSdl();
         const auto msg = (std::ostringstream() << SDL_GetError()).str();
         throw std::runtime_error(msg);
     }
@@ -55,10 +55,10 @@ SdlState::SdlState(int w, int h, int zoom)
 }
 
 SdlState::~SdlState() {
-    cleanUpSDL();
+    cleanUpSdl();
 }
 
-void SdlState::cleanUpSDL() {
+void SdlState::cleanUpSdl() {
     if (sheet != nullptr) {
         SDL_DestroyTexture(sheet);
     }
