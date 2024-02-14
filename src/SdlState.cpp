@@ -35,6 +35,7 @@ SdlState::SdlState(int w, int h, int zoom) : w {w}, h {h}, zoom {zoom} {
             SDL_TEXTUREACCESS_TARGET, w, h);
 
     loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, &fontSheet);
+    loadSheet("images/spriteSheet.bmp", SDL_TRUE, &spriteSheet);
 
     pos_x = (w+tileW)/2;
     pos_y = (h+tileH)/2;
@@ -60,7 +61,7 @@ void SdlState::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
 }
 
 void SdlState::cleanUpSdl() {
-    for (auto texture : {fontSheet.texture, framebuffer}) {
+    for (auto texture : {fontSheet.texture, spriteSheet.texture, framebuffer}) {
         if (texture != nullptr) {
             SDL_DestroyTexture(texture);
             texture = nullptr;
@@ -105,20 +106,23 @@ void SdlState::update() {
 }
 
 
-void SdlState::drawSprite(const int n, const float x, const float y) const {
-    const int srcX = (n*tileW)%fontSheet.textureW;
-    const int srcY = tileH*(n*tileW/fontSheet.textureW);
+void SdlState::drawSheet(const Sheet &sheet, const int n, const float x, const float y) const {
+    const int srcX = (n*tileW)%sheet.textureW;
+    const int srcY = tileH*(n*tileW/sheet.textureW);
 
     const SDL_Rect src {srcX, srcY, tileW, tileH};
     const SDL_Rect dst {static_cast<int>(x), static_cast<int>(y), tileW, tileH};
-    SDL_RenderCopy(renderer, fontSheet.texture, &src, &dst);
+    SDL_RenderCopy(renderer, sheet.texture, &src, &dst);
 }
 
 void SdlState::draw() const {
     cls();
-    drawSprite(65, pos_x, pos_y);
-    drawSprite(66, pos_x + 8, pos_y);
-    drawSprite(67, pos_x + 16, pos_y);
+
+    drawFont(65, pos_x, pos_y);
+    drawFont(66, pos_x + 8, pos_y);
+    drawFont(67, pos_x + 16, pos_y);
+
+    drawSprite(1, pos_x -8, pos_y);
 }
 
 void SdlState::drawSdl() const {
@@ -140,7 +144,7 @@ const Uint32 SdlState::readFirstPixel(SDL_Surface* surface) const {
     const SDL_PixelFormat* const format = surface->format;
 
     assert(format->palette != nullptr);
-    assert(format->palette->ncolors <= 0xff);
+    assert(format->palette->ncolors <= 256);
     assert(format->BitsPerPixel == 8);
     const Uint8 pixel = static_cast<Uint8*>(surface->pixels)[0];
 

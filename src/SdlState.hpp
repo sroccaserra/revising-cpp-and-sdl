@@ -21,7 +21,14 @@ class SdlState {
         void draw() const;
         // Could be an API available to user
         void cls() const {SDL_RenderClear(renderer);}
-        void drawSprite(const int n, const float x, const float y) const;
+
+        void drawSheet(const Sheet &sheet, const int n, const float x, const float y) const;
+        void drawFont(const int n, const float x, const float y) const {
+            drawSheet(fontSheet, n, x, y);
+        }
+        void drawSprite(const int n, const float x, const float y) const {
+            drawSheet(spriteSheet, n, x, y);
+        }
 
         // Needed by SDL
         void processInput();
@@ -38,6 +45,7 @@ class SdlState {
         int zoom;
 
         Sheet fontSheet;
+        Sheet spriteSheet;
 
         Uint8 bgColor[3] {63, 63, 63};
 
