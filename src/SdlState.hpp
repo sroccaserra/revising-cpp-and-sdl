@@ -29,6 +29,9 @@ class SdlState {
         void drawSprite(const int n, const float x, const float y) const {
             drawSheet(spriteSheet, n, x, y);
         }
+        void drawBackground(const int n, const float x, const float y) const {
+            drawSheet(backgroundSheet, n, x, y);
+        }
 
         // Needed by SDL
         void processInput();
@@ -46,6 +49,7 @@ class SdlState {
 
         Sheet fontSheet;
         Sheet spriteSheet;
+        Sheet backgroundSheet;
 
         Uint8 bgColor[3] {63, 63, 63};
 

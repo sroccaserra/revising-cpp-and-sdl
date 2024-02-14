@@ -36,6 +36,7 @@ SdlState::SdlState(int w, int h, int zoom) : w {w}, h {h}, zoom {zoom} {
 
     loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, &fontSheet);
     loadSheet("images/spriteSheet.bmp", SDL_TRUE, &spriteSheet);
+    loadSheet("images/backgroundSheet.bmp", SDL_FALSE, &backgroundSheet);
 
     pos_x = (w+tileW)/2;
     pos_y = (h+tileH)/2;
@@ -61,7 +62,9 @@ void SdlState::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
 }
 
 void SdlState::cleanUpSdl() {
-    for (auto texture : {fontSheet.texture, spriteSheet.texture, framebuffer}) {
+    for (auto texture : {
+            fontSheet.texture, spriteSheet.texture, backgroundSheet.texture,
+            framebuffer}) {
         if (texture != nullptr) {
             SDL_DestroyTexture(texture);
             texture = nullptr;
@@ -117,6 +120,8 @@ void SdlState::drawSheet(const Sheet &sheet, const int n, const float x, const f
 
 void SdlState::draw() const {
     cls();
+
+    drawBackground(0, 0, 0);
 
     drawFont(65, pos_x, pos_y);
     drawFont(66, pos_x + 8, pos_y);
