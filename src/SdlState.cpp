@@ -100,9 +100,10 @@ void SdlState::update() {
     }
 }
 
+
 void SdlState::drawSprite(const int n, const float x, const float y) const {
     const int sheetX = (n*tileW)%sheetW;
-    const int sheetY = tileH*n/(sheetW/tileW);
+    const int sheetY = tileH*(n*tileW/sheetW);
 
     const SDL_Rect src {sheetX, sheetY, tileW, tileH};
     const SDL_Rect dst {static_cast<int>(x), static_cast<int>(y), tileW, tileH};
@@ -112,6 +113,8 @@ void SdlState::drawSprite(const int n, const float x, const float y) const {
 void SdlState::draw() const {
     cls();
     drawSprite(65, pos_x, pos_y);
+    drawSprite(66, pos_x + 8, pos_y);
+    drawSprite(67, pos_x + 16, pos_y);
 }
 
 void SdlState::drawSdl() const {
