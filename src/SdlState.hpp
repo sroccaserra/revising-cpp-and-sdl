@@ -3,6 +3,12 @@
 
 #include <SDL2/SDL.h>
 
+struct Sheet {
+    SDL_Texture* texture;
+    int textureW;
+    int textureH;
+};
+
 class SdlState {
     public:
         SdlState(int w, int h, int zoom);
@@ -21,20 +27,21 @@ class SdlState {
         void processInput();
         void drawSdl() const;
         void cleanUpSdl();
+        void loadSheet(const char* path, bool hasColorKey, Sheet* sheet);
         const Uint32 readFirstPixel(SDL_Surface* surface) const;
 
         SDL_Window* window;
         SDL_Renderer* renderer;
         SDL_Texture* framebuffer;
-        SDL_Texture* sheet;
-
-        bool shouldQuit {false};
-        Uint8 bgColor[3] {63, 63, 63};
-        int sheetW;
-        int sheetH;
         int w;
         int h;
         int zoom;
+
+        Sheet fontSheet;
+
+        Uint8 bgColor[3] {63, 63, 63};
+
+        bool shouldQuit {false};
         float pos_x;
         float pos_y;
 };

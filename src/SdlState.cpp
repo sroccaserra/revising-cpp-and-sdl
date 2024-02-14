@@ -34,19 +34,7 @@ SdlState::SdlState(int w, int h, int zoom) : w {w}, h {h}, zoom {zoom} {
     framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, w, h);
 
-    const auto sheetPath = "images/Atari_ST_character_set_8x8.bmp";
-    const auto image = SDL_LoadBMP(sheetPath);
-    if (image == nullptr) {
-        cleanUpSdl();
-        const auto msg = (std::ostringstream() << SDL_GetError()).str();
-        throw std::runtime_error(msg);
-    }
-    const auto firstPixel = readFirstPixel(image);
-    SDL_SetColorKey(image, SDL_TRUE, firstPixel);
-    sheet = SDL_CreateTextureFromSurface(renderer, image);
-    SDL_FreeSurface(image);
-
-    SDL_QueryTexture(sheet, nullptr, nullptr, &sheetW, &sheetH);
+    loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, &fontSheet);
 
     pos_x = (w+tileW)/2;
     pos_y = (h+tileH)/2;
@@ -56,13 +44,29 @@ SdlState::~SdlState() {
     cleanUpSdl();
 }
 
+void SdlState::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
+    const auto image = SDL_LoadBMP(path);
+    if (image == nullptr) {
+        cleanUpSdl();
+        const auto msg = (std::ostringstream() << SDL_GetError()).str();
+        throw std::runtime_error(msg);
+    }
+    const auto firstPixel = readFirstPixel(image);
+    SDL_SetColorKey(image, hasColorKey, firstPixel);
+    sheet->texture = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+
+    SDL_QueryTexture(sheet->texture, nullptr, nullptr, &sheet->textureW, &sheet->textureH);
+}
+
 void SdlState::cleanUpSdl() {
-    if (sheet != nullptr) {
-        SDL_DestroyTexture(sheet);
+    for (auto texture : {fontSheet.texture, framebuffer}) {
+        if (texture != nullptr) {
+            SDL_DestroyTexture(texture);
+            texture = nullptr;
+        }
     }
-    if (framebuffer != nullptr) {
-        SDL_DestroyTexture(framebuffer);
-    }
+
     if (renderer != nullptr) {
         SDL_DestroyRenderer(renderer);
     }
@@ -102,12 +106,12 @@ void SdlState::update() {
 
 
 void SdlState::drawSprite(const int n, const float x, const float y) const {
-    const int sheetX = (n*tileW)%sheetW;
-    const int sheetY = tileH*(n*tileW/sheetW);
+    const int srcX = (n*tileW)%fontSheet.textureW;
+    const int srcY = tileH*(n*tileW/fontSheet.textureW);
 
-    const SDL_Rect src {sheetX, sheetY, tileW, tileH};
+    const SDL_Rect src {srcX, srcY, tileW, tileH};
     const SDL_Rect dst {static_cast<int>(x), static_cast<int>(y), tileW, tileH};
-    SDL_RenderCopy(renderer, sheet, &src, &dst);
+    SDL_RenderCopy(renderer, fontSheet.texture, &src, &dst);
 }
 
 void SdlState::draw() const {
