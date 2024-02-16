@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-#include "SdlState.hpp"
+#include "SdlMachine.hpp"
 #include "Program.hpp"
 
 int main() {
@@ -12,10 +12,10 @@ int main() {
 
     int result {0};
     try {
-        SdlState sdlState(480, 270, 3);
-        Program program(sdlState);
-        sdlState.program = &program;
-        sdlState.run();
+        SdlMachine sdlMachine(480, 270, 3);
+        Program program(sdlMachine);
+        sdlMachine.program = &program;
+        sdlMachine.run();
     }
     catch(std::runtime_error& e) {
         std::cerr << e.what() << std::endl;

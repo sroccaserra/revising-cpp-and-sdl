@@ -12,10 +12,10 @@ struct Sheet {
     int textureH;
 };
 
-class SdlState : public Machine {
+class SdlMachine : public Machine {
     public:
-        SdlState(int w, int h, int zoom);
-        virtual ~SdlState();
+        SdlMachine(int w, int h, int zoom);
+        virtual ~SdlMachine();
         Program* program;
         void run();
 

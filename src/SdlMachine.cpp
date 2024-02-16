@@ -2,9 +2,9 @@
 #include <cassert>
 #include <SDL2/SDL.h>
 
-#include "SdlState.hpp"
+#include "SdlMachine.hpp"
 
-SdlState::SdlState(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
+SdlMachine::SdlMachine(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
     if(0 == (SDL_WasInit(0) & SDL_INIT_VIDEO)) {
         auto msg = (std::ostringstream() << "SDL was not initialized.").str();
         throw std::runtime_error(msg);
@@ -36,11 +36,11 @@ SdlState::SdlState(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
     loadSheet("images/backgroundSheet.bmp", SDL_FALSE, &backgroundSheet);
 }
 
-SdlState::~SdlState() {
+SdlMachine::~SdlMachine() {
     cleanUpSdl();
 }
 
-void SdlState::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
+void SdlMachine::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
     const auto image = SDL_LoadBMP(path);
     if (image == nullptr) {
         cleanUpSdl();
@@ -55,7 +55,7 @@ void SdlState::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
     SDL_QueryTexture(sheet->texture, nullptr, nullptr, &sheet->textureW, &sheet->textureH);
 }
 
-void SdlState::cleanUpSdl() {
+void SdlMachine::cleanUpSdl() {
     for (auto texture : {
             fontSheet.texture, spriteSheet.texture, backgroundSheet.texture,
             framebuffer}) {
@@ -73,7 +73,7 @@ void SdlState::cleanUpSdl() {
     }
 }
 
-void SdlState::run() {
+void SdlMachine::run() {
     assert(program != nullptr);
 
     program->init();
@@ -85,7 +85,7 @@ void SdlState::run() {
     }
 }
 
-void SdlState::processInput() {
+void SdlMachine::processInput() {
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -99,7 +99,7 @@ void SdlState::processInput() {
     }
 }
 
-void SdlState::drawSheet(const Sheet &sheet, const int n, const float x, const float y) const {
+void SdlMachine::drawSheet(const Sheet &sheet, const int n, const float x, const float y) const {
     const int srcX = (n*tileW)%sheet.textureW;
     const int srcY = tileH*(n*tileW/sheet.textureW);
 
@@ -108,7 +108,7 @@ void SdlState::drawSheet(const Sheet &sheet, const int n, const float x, const f
     SDL_RenderCopy(renderer, sheet.texture, &src, &dst);
 }
 
-void SdlState::drawSdl() const {
+void SdlMachine::drawSdl() const {
     // Render to buffer
     SDL_SetRenderTarget(renderer, framebuffer);
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
@@ -123,7 +123,7 @@ void SdlState::drawSdl() const {
     SDL_RenderPresent(renderer);
 }
 
-const Uint32 SdlState::readFirstPixel(SDL_Surface* surface) const {
+const Uint32 SdlMachine::readFirstPixel(SDL_Surface* surface) const {
     const SDL_PixelFormat* const format = surface->format;
 
     assert(format->palette != nullptr);
