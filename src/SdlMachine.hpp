@@ -21,14 +21,14 @@ class SdlMachine : public Machine {
 
     private:
         // Implement Machine methods
-        void cls() const {SDL_RenderClear(renderer);}
-        void drawFont(const int n, const float x, const float y) const {
+        void cls() const override {SDL_RenderClear(renderer);}
+        void drawFont(const int n, const float x, const float y) const override {
             drawSheet(fontSheet, n, x, y);
         }
-        void drawSprite(const int n, const float x, const float y) const {
+        void drawSprite(const int n, const float x, const float y) const override {
             drawSheet(spriteSheet, n, x, y);
         }
-        void drawBackground(const int n, const float x, const float y) const {
+        void drawBackground(const int n, const float x, const float y) const override {
             drawSheet(backgroundSheet, n, x, y);
         }
 
