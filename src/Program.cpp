@@ -40,7 +40,7 @@ void Program::draw() const {
     }
 
     // cursor
-    machine.drawSprite(1, pos_x -8, pos_y, 2, 2);
+    machine.drawSprite(1, machine.mouseX, machine.mouseY, 2, 2);
 }
 
 void Program::drawText(const std::string &text, const float x, const float y) const {

@@ -34,6 +34,8 @@ SdlMachine::SdlMachine(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
     loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, &fontSheet);
     loadSheet("images/spriteSheet.bmp", SDL_TRUE, &spriteSheet);
     loadSheet("images/backgroundSheet.bmp", SDL_FALSE, &backgroundSheet);
+
+    SDL_ShowCursor(SDL_DISABLE);
 }
 
 SdlMachine::~SdlMachine() {
@@ -86,6 +88,10 @@ void SdlMachine::run() {
 }
 
 void SdlMachine::processInput() {
+    SDL_GetMouseState(&mouseX, &mouseY);
+    mouseX /= zoom;
+    mouseY /= zoom;
+
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         switch (event.type) {

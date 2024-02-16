@@ -18,6 +18,9 @@ class Machine {
 
         int w;
         int h;
+
+        int mouseX;
+        int mouseY;
 };
 
 #endif // __MACHINE_HPP__
