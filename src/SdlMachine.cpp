@@ -111,7 +111,6 @@ void SdlMachine::drawSheet(const Sheet &sheet, const int n, const float x, const
 void SdlMachine::drawSdl() const {
     // Render to buffer
     SDL_SetRenderTarget(renderer, framebuffer);
-    SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
 
     program->draw();
 

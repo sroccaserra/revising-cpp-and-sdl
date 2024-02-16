@@ -21,7 +21,10 @@ class SdlMachine : public Machine {
 
     private:
         // Implement Machine methods
-        void cls() const override {SDL_RenderClear(renderer);}
+        void cls() const override {
+            SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
+            SDL_RenderClear(renderer);
+        }
         void drawFont(const int n, const float x, const float y) const override {
             drawSheet(fontSheet, n, x, y);
         }
