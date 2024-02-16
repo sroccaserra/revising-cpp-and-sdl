@@ -15,11 +15,23 @@ void Program::update() {
 void Program::draw() const {
     machine.cls();
 
-    machine.drawBackground(0, 0, 0);
+    machine.drawBackground(1, 0, 0);
+    for (int j = 1; j < 59; ++j) {
+        machine.drawBackground(2, j*tileW, 0);
+    }
+    for (int j = 0; j < 60; ++j) {
+        machine.drawBackground(4, j*tileW, tileH);
+    }
+    machine.drawBackground(3, 59*tileW, 0);
+    for (int i = 2 ; i < 34; ++i) {
+        for (int j = 0 ; j < 60; ++j) {
+            machine.drawBackground(0, j*tileW, i*tileH);
+        }
+    }
 
-    machine.drawFont(65, pos_x, pos_y);
-    machine.drawFont(66, pos_x + 8, pos_y);
-    machine.drawFont(67, pos_x + 16, pos_y);
+    machine.drawFont(65, tileW, tileH/2);
+    machine.drawFont(66, tileW*2, tileH/2);
+    machine.drawFont(67, tileW*3, tileH/2);
 
     machine.drawSprite(1, pos_x -8, pos_y);
 }

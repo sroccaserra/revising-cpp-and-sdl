@@ -51,7 +51,7 @@ class SdlMachine : public Machine {
         Sheet spriteSheet;
         Sheet backgroundSheet;
 
-        Uint8 bgColor[3] {63, 63, 63};
+        Uint8 bgColor[3] {0, 0, 0};
 
         bool shouldQuit {false};
         int zoom;
