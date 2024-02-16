@@ -6,7 +6,7 @@ LDLIBS=$(shell sdl2-config --libs)
 run: src/sdl
 	src/sdl
 
-src/sdl: src/SdlState.o
+src/sdl: src/SdlState.o src/Program.o
 
 clean:
 	rm -f src/sdl src/*.o

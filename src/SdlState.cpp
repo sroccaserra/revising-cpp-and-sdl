@@ -4,10 +4,7 @@
 
 #include "SdlState.hpp"
 
-constexpr int tileW {8};
-constexpr int tileH {8};
-
-SdlState::SdlState(int w, int h, int zoom) : w {w}, h {h}, zoom {zoom} {
+SdlState::SdlState(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
     if(0 == (SDL_WasInit(0) & SDL_INIT_VIDEO)) {
         auto msg = (std::ostringstream() << "SDL was not initialized.").str();
         throw std::runtime_error(msg);
@@ -37,9 +34,6 @@ SdlState::SdlState(int w, int h, int zoom) : w {w}, h {h}, zoom {zoom} {
     loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, &fontSheet);
     loadSheet("images/spriteSheet.bmp", SDL_TRUE, &spriteSheet);
     loadSheet("images/backgroundSheet.bmp", SDL_FALSE, &backgroundSheet);
-
-    pos_x = (w+tileW)/2;
-    pos_y = (h+tileH)/2;
 }
 
 SdlState::~SdlState() {
@@ -80,9 +74,13 @@ void SdlState::cleanUpSdl() {
 }
 
 void SdlState::run() {
+    assert(program != nullptr);
+
+    program->init();
+
     while (!shouldQuit) {
         processInput();
-        update();
+        program->update();
         drawSdl();
     }
 }
@@ -101,14 +99,6 @@ void SdlState::processInput() {
     }
 }
 
-void SdlState::update() {
-    pos_x += 1;
-    if (w <= pos_x) {
-        pos_x = -tileW;
-    }
-}
-
-
 void SdlState::drawSheet(const Sheet &sheet, const int n, const float x, const float y) const {
     const int srcX = (n*tileW)%sheet.textureW;
     const int srcY = tileH*(n*tileW/sheet.textureW);
@@ -118,24 +108,12 @@ void SdlState::drawSheet(const Sheet &sheet, const int n, const float x, const f
     SDL_RenderCopy(renderer, sheet.texture, &src, &dst);
 }
 
-void SdlState::draw() const {
-    cls();
-
-    drawBackground(0, 0, 0);
-
-    drawFont(65, pos_x, pos_y);
-    drawFont(66, pos_x + 8, pos_y);
-    drawFont(67, pos_x + 16, pos_y);
-
-    drawSprite(1, pos_x -8, pos_y);
-}
-
 void SdlState::drawSdl() const {
     // Render to buffer
     SDL_SetRenderTarget(renderer, framebuffer);
     SDL_SetRenderDrawColor(renderer, bgColor[0], bgColor[1], bgColor[2], 255);
 
-    draw();
+    program->draw();
 
     // Render buffer
     SDL_SetRenderTarget(renderer, nullptr);

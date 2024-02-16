@@ -1,7 +1,10 @@
-#ifndef __STATE_HPP__
-#define __STATE_HPP__
+#ifndef __SDL_STATE_HPP__
+#define __SDL_STATE_HPP__
 
 #include <SDL2/SDL.h>
+
+#include "Machine.hpp"
+#include "Program.hpp"
 
 struct Sheet {
     SDL_Texture* texture;
@@ -9,20 +12,16 @@ struct Sheet {
     int textureH;
 };
 
-class SdlState {
+class SdlState : public Machine {
     public:
         SdlState(int w, int h, int zoom);
-        ~SdlState();
+        virtual ~SdlState();
+        Program* program;
         void run();
 
     private:
-        // Could be user defined
-        void update();
-        void draw() const;
-        // Could be an API available to user
+        // Implement Machine methods
         void cls() const {SDL_RenderClear(renderer);}
-
-        void drawSheet(const Sheet &sheet, const int n, const float x, const float y) const;
         void drawFont(const int n, const float x, const float y) const {
             drawSheet(fontSheet, n, x, y);
         }
@@ -33,19 +32,17 @@ class SdlState {
             drawSheet(backgroundSheet, n, x, y);
         }
 
-        // Needed by SDL
+        // SDL stuff
         void processInput();
         void drawSdl() const;
-        void cleanUpSdl();
         void loadSheet(const char* path, bool hasColorKey, Sheet* sheet);
+        void drawSheet(const Sheet &sheet, const int n, const float x, const float y) const;
         const Uint32 readFirstPixel(SDL_Surface* surface) const;
+        void cleanUpSdl();
 
         SDL_Window* window;
         SDL_Renderer* renderer;
         SDL_Texture* framebuffer;
-        int w;
-        int h;
-        int zoom;
 
         Sheet fontSheet;
         Sheet spriteSheet;
@@ -54,8 +51,7 @@ class SdlState {
         Uint8 bgColor[3] {63, 63, 63};
 
         bool shouldQuit {false};
-        float pos_x;
-        float pos_y;
+        int zoom;
 };
 
-#endif // __STATE_HPP__
+#endif // __SDL_STATE_HPP__
