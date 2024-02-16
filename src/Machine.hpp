@@ -11,8 +11,10 @@ class Machine {
 
         virtual void cls() const = 0;
         virtual void drawFont(const int n, const float x, const float y) const = 0;
-        virtual void drawSprite(const int n, const float x, const float y) const = 0;
-        virtual void drawBackground(const int n, const float x, const float y) const = 0;
+        virtual void drawSprite(const int n, const float x, const float y,
+                const int nTilesW = 1, const int nTilesH = 1) const = 0;
+        virtual void drawBackground(const int n, const float x, const float y,
+                const int nTilesW = 1, const int nTilesH = 1) const = 0;
 
         int w;
         int h;

@@ -99,12 +99,13 @@ void SdlMachine::processInput() {
     }
 }
 
-void SdlMachine::drawSheet(const Sheet &sheet, const int n, const float x, const float y) const {
+void SdlMachine::drawSheet(const Sheet &sheet, const int n, const float x, const float y,
+        const int nTilesW, const int nTilesH) const {
     const int srcX = (n*tileW)%sheet.textureW;
     const int srcY = tileH*(n*tileW/sheet.textureW);
 
-    const SDL_Rect src {srcX, srcY, tileW, tileH};
-    const SDL_Rect dst {static_cast<int>(x), static_cast<int>(y), tileW, tileH};
+    const SDL_Rect src {srcX, srcY, tileW*nTilesW, tileH*nTilesH};
+    const SDL_Rect dst {static_cast<int>(x), static_cast<int>(y), tileW*nTilesW, tileH*nTilesH};
     SDL_RenderCopy(renderer, sheet.texture, &src, &dst);
 }
 

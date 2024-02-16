@@ -39,7 +39,8 @@ void Program::draw() const {
         }
     }
 
-    machine.drawSprite(1, pos_x -8, pos_y);
+    // cursor
+    machine.drawSprite(1, pos_x -8, pos_y, 2, 2);
 }
 
 void Program::drawText(const std::string &text, const float x, const float y) const {
