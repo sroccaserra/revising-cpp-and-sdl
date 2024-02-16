@@ -29,9 +29,8 @@ void Program::draw() const {
     for (int j = 0; j < nTilesW; ++j) {
         machine.drawBackground(4, j*tileW, tileH);
     }
-    machine.drawFont(65, tileW, tileH/2);
-    machine.drawFont(66, tileW*2, tileH/2);
-    machine.drawFont(67, tileW*3, tileH/2);
+
+    drawText("Revising SDL and C++", tileW, tileH/2);
 
     // draw background
     for (int i = 2 ; i <= nTilesH; ++i) {
@@ -41,4 +40,12 @@ void Program::draw() const {
     }
 
     machine.drawSprite(1, pos_x -8, pos_y);
+}
+
+void Program::drawText(const std::string &text, const float x, const float y) const {
+    float char_x = x;
+    for (char c : text) {
+        machine.drawFont(c, char_x, y);
+        char_x += tileW;
+    }
 }
