@@ -26,8 +26,8 @@ class Machine {
         void drawTileMap(const std::vector<std::vector<int>>& tileMap, const float x, const float y) const;
         void drawText(const std::string& text, const float x, const float y) const;
 
-        void loadConfig(std::string filename);
-        std::vector<std::vector<int>> loadIntMatrix(std::string name);
+        void loadConfig(const std::string& filename);
+        std::vector<std::vector<int>> loadIntMatrix(const std::string& name);
 
         int w;
         int h;

@@ -17,13 +17,13 @@ Machine::~Machine() {
     lua_close(L);
 }
 
-void Machine::loadConfig(std::string filename) {
+void Machine::loadConfig(const std::string& filename) {
     if (LUA_OK != luaL_dofile(L, filename.c_str())) {
         throw std::runtime_error(lua_tostring(L, -1));
     }
 }
 
-std::vector<std::vector<int>> Machine::loadIntMatrix(std::string name) {
+std::vector<std::vector<int>> Machine::loadIntMatrix(const std::string& name) {
     int startTop = lua_gettop(L);
 
     lua_getglobal(L, name.c_str());
