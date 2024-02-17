@@ -4,12 +4,6 @@
 #include <string>
 #include <vector>
 
-extern "C" {
-    #include "lua.h"
-    #include "lualib.h"
-    #include "lauxlib.h"
-}
-
 #include "Machine.hpp"
 
 class Program {
@@ -23,12 +17,9 @@ class Program {
         void draw() const;
 
     private:
-        void loadConfig();
-        std::vector<std::vector<int>> loadIntMatrix(std::string name);
         void drawText(const std::string &text, float x, float y) const;
 
         Machine& machine;
-        lua_State* L;
 
         float pos_x;
         float pos_y;

@@ -6,7 +6,7 @@ LDLIBS=$(shell sdl2-config --libs) -llua5.4
 run: src/sdl
 	src/sdl
 
-src/sdl: src/SdlMachine.o src/Program.o
+src/sdl: src/Machine.o src/SdlMachine.o src/Program.o
 
 clean:
 	rm -f src/sdl src/*.o
