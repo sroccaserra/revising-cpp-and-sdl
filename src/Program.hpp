@@ -3,21 +3,31 @@
 
 #include <string>
 
+extern "C" {
+    #include "lua.h"
+    #include "lualib.h"
+    #include "lauxlib.h"
+}
+
 #include "Machine.hpp"
 
 class Program {
 
     public:
-        Program(Machine& machine) : machine {machine} {}
+        Program(Machine& machine);
+        ~Program();
 
         void init();
         void update();
         void draw() const;
 
     private:
+        void loadConfig();
         void drawText(const std::string &text, float x, float y) const;
 
         Machine& machine;
+        lua_State* L;
+
         float pos_x;
         float pos_y;
 };

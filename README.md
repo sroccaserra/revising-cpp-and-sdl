@@ -6,6 +6,10 @@ make run
 
 ![image](https://github.com/sroccaserra/revising-cpp-and-sdl/assets/7529/18d5eeca-d313-4434-b48d-3da99ec46228)
 
+## Requirements
+
+* liblua5.4-dev
+
 ## References
 
 SDL:
@@ -27,6 +31,13 @@ C++:
 - <https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines>
 - <https://github.com/isocpp/CppCoreGuidelines>
 - <https://www.informit.com/store/tour-of-c-plus-plus-9780136816485>
+
+Lua:
+
+- <https://www.lua.org/manual/5.4/>
+- <https://www.lua.org/pil/contents.html>
+- <https://www.lua.org/pil/24.html>
+- <https://edw.is/using-lua-with-cpp/>
 
 Font:
 

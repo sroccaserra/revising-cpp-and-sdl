@@ -1,8 +1,64 @@
+#include <iostream>
+#include <cassert>
+
+extern "C" {
+    #include "lua.h"
+    #include "lualib.h"
+    #include "lauxlib.h"
+}
+
 #include "Program.hpp"
 
+Program::Program(Machine& machine) : machine{machine} {
+    L = luaL_newstate();
+    luaL_openlibs(L);
+}
+
+Program::~Program() {
+    lua_close(L);
+}
+
 void Program::init(){
+    loadConfig();
+
     pos_x = (machine.w+tileW)/2;
     pos_y = (machine.h+tileH)/2;
+}
+
+void Program::loadConfig() {
+    if (LUA_OK != luaL_dofile(L, "config.lua")) {
+        throw std::runtime_error(lua_tostring(L, -1));
+    }
+
+    lua_getglobal(L, "menu_bar");
+    if (!lua_istable(L, -1)) {
+        throw std::runtime_error("Global variable 'menu_bar' is not defined.");
+    }
+
+    lua_len(L, -1);
+    int h = lua_tointeger(L, -1);
+    assert(0 < h);
+    lua_pop(L, 1);
+
+    lua_geti(L, -1, 1);
+    lua_len(L, -1);
+    int w = lua_tointeger(L, -1);
+    assert(0 < w);
+    lua_pop(L, 2);
+
+    for (int i = 1; i<= h; ++i) {
+        lua_geti(L, -1, i);
+        for (int j = 1; j<= w; ++j) {
+            lua_geti(L, -1, j);
+            int n = lua_tointeger(L, -1);
+            std::cout << i << ":" << j << " n = " << n << "\n";
+            lua_pop(L, 1);
+        }
+        lua_pop(L, 1);
+    }
+
+    lua_pop(L, 1);
+    assert(0 == lua_gettop(L));
 }
 
 void Program::update() {
