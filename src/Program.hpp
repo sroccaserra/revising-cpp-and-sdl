@@ -18,9 +18,6 @@ class Program {
     private:
         Machine& machine;
 
-        float pos_x;
-        float pos_y;
-
         std::vector<std::vector<int>> menuBarMap;
         TileRect cursorTileRect;
 };

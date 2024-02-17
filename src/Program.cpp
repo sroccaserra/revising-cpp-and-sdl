@@ -8,16 +8,9 @@ void Program::init(){
     machine.loadConfig("config.lua");
     menuBarMap = machine.loadIntMatrix("menu_bar_tiles");
     cursorTileRect = machine.loadTileRect("cursor_tiles");
-
-    pos_x = (machine.w+tileW)/2;
-    pos_y = (machine.h+tileH)/2;
 }
 
 void Program::update() {
-    pos_x += 1;
-    if (machine.w <= pos_x) {
-        pos_x = -tileW;
-    }
 }
 
 void Program::draw() const {
