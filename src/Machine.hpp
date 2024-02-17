@@ -23,6 +23,9 @@ class Machine {
         virtual void drawBackground(const int n, const float x, const float y,
                 const int nTilesW = 1, const int nTilesH = 1) const = 0;
 
+        void drawTileMap(const std::vector<std::vector<int>>& tileMap, const float x, const float y) const;
+        void drawText(const std::string& text, const float x, const float y) const;
+
         void loadConfig(std::string filename);
         std::vector<std::vector<int>> loadIntMatrix(std::string name);
 

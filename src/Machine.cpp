@@ -63,3 +63,23 @@ std::vector<std::vector<int>> Machine::loadIntMatrix(std::string name) {
 
     return matrix;
 }
+
+void Machine::drawTileMap(const std::vector<std::vector<int>>& tileMap, const float x, const float y) const {
+    float i {y};
+    for (auto& row : tileMap) {
+        float j {x};
+        for(int n : row) {
+            drawBackground(n, j, i);
+            j += tileW;
+        }
+        i += tileH;
+    }
+}
+
+void Machine::drawText(const std::string& text, const float x, const float y) const {
+    float char_x {x};
+    for (char c : text) {
+        drawFont(c, char_x, y);
+        char_x += tileW;
+    }
+}

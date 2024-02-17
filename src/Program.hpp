@@ -17,8 +17,6 @@ class Program {
         void draw() const;
 
     private:
-        void drawText(const std::string &text, float x, float y) const;
-
         Machine& machine;
 
         float pos_x;
