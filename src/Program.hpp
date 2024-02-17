@@ -2,6 +2,7 @@
 #define __PROGRAM_HPP__
 
 #include <string>
+#include <vector>
 
 extern "C" {
     #include "lua.h"
@@ -23,6 +24,7 @@ class Program {
 
     private:
         void loadConfig();
+        std::vector<std::vector<int>> loadIntMatrix(std::string name);
         void drawText(const std::string &text, float x, float y) const;
 
         Machine& machine;

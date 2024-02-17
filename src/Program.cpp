@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <vector>
 #include <cassert>
 
 extern "C" {
@@ -30,35 +32,54 @@ void Program::loadConfig() {
         throw std::runtime_error(lua_tostring(L, -1));
     }
 
-    lua_getglobal(L, "menu_bar");
+    std::vector<std::vector<int>> matrix = loadIntMatrix("menu_bar");
+    for (auto row : matrix) {
+        for(auto n : row) {
+            std::cout << n << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+std::vector<std::vector<int>> Program::loadIntMatrix(std::string name) {
+    int startTop = lua_gettop(L);
+
+    lua_getglobal(L, name.c_str());
     if (!lua_istable(L, -1)) {
-        throw std::runtime_error("Global variable 'menu_bar' is not defined.");
+        std::string msg = (std::ostringstream() << "Global variable '" << name << "' is not defined").str();
+        throw std::runtime_error(msg);
     }
 
     lua_len(L, -1);
-    int h = lua_tointeger(L, -1);
+    const int h = lua_tointeger(L, -1);
     assert(0 < h);
     lua_pop(L, 1);
 
     lua_geti(L, -1, 1);
     lua_len(L, -1);
-    int w = lua_tointeger(L, -1);
+    const int w = lua_tointeger(L, -1);
     assert(0 < w);
     lua_pop(L, 2);
 
+    auto matrix = std::vector<std::vector<int>>();
+
     for (int i = 1; i<= h; ++i) {
         lua_geti(L, -1, i);
+        matrix.push_back(std::vector<int>());
+        auto& row = matrix.back();
         for (int j = 1; j<= w; ++j) {
             lua_geti(L, -1, j);
             int n = lua_tointeger(L, -1);
-            std::cout << i << ":" << j << " n = " << n << "\n";
+            row.push_back(n);
             lua_pop(L, 1);
         }
         lua_pop(L, 1);
     }
 
     lua_pop(L, 1);
-    assert(0 == lua_gettop(L));
+    assert(startTop == lua_gettop(L));
+
+    return matrix;
 }
 
 void Program::update() {
