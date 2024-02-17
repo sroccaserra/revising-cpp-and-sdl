@@ -23,7 +23,43 @@ void Machine::loadConfig(const std::string& filename) {
     }
 }
 
-std::vector<std::vector<int>> Machine::loadIntMatrix(const std::string& name) {
+const TileRect Machine::loadTileRect(const std::string& name) const {
+    int startTop = lua_gettop(L);
+
+    lua_getglobal(L, name.c_str());
+    if (!lua_istable(L, -1)) {
+        std::string msg = (std::ostringstream() << "Global variable '" << name << "' is not defined").str();
+        throw std::runtime_error(msg);
+    }
+    lua_len(L, -1);
+    const int n = lua_tointeger(L, -1);
+    assert(4 == n);
+    lua_pop(L, 1);
+
+    TileRect result;
+
+    lua_geti(L, -1, 1);
+    result.x = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_geti(L, -1, 2);
+    result.y = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_geti(L, -1, 3);
+    result.w = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_geti(L, -1, 4);
+    result.h = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_pop(L, 1);
+    assert(startTop == lua_gettop(L));
+    return result;
+}
+
+const std::vector<std::vector<int>> Machine::loadIntMatrix(const std::string& name) const {
     int startTop = lua_gettop(L);
 
     lua_getglobal(L, name.c_str());

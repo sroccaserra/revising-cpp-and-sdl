@@ -26,22 +26,26 @@ class SdlMachine : public Machine {
             SDL_RenderClear(renderer);
         }
         void drawFont(const int n, const float x, const float y) const override {
-            drawSheet(fontSheet, n, x, y, 1, 1);
+            drawTilesFromSheet(fontSheet, n, x, y, 1, 1);
         }
         void drawSprite(const int n, const float x, const float y,
                 const int nTilesW, const int nTilesH) const override {
-            drawSheet(spriteSheet, n, x, y, nTilesW, nTilesH);
+            drawTilesFromSheet(spriteSheet, n, x, y, nTilesW, nTilesH);
+        }
+        void drawSprite(const TileRect& tileRect, const float x, const float y) const override {
+            drawTileRectFromSheet(spriteSheet, tileRect, x, y);
         }
         void drawBackground(const int n, const float x, const float y,
                 const int nTilesW, const int nTilesH) const override {
-            drawSheet(backgroundSheet, n, x, y, nTilesW, nTilesH);
+            drawTilesFromSheet(backgroundSheet, n, x, y, nTilesW, nTilesH);
         }
 
         // SDL stuff
         void processInput();
         void drawSdl() const;
         void loadSheet(const char* path, bool hasColorKey, Sheet* sheet);
-        void drawSheet(const Sheet &sheet, const int n, const float x, const float y, const int nTilesW, const int nTilesH) const;
+        void drawTileRectFromSheet(const Sheet &sheet, const TileRect& rect, const float x, const float y) const;
+        void drawTilesFromSheet(const Sheet &sheet, const int n, const float x, const float y, const int nTilesW, const int nTilesH) const;
         const Uint32 readFirstPixel(SDL_Surface* surface) const;
         void cleanUpSdl();
 

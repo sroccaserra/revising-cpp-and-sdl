@@ -6,7 +6,8 @@ Program::~Program() { }
 
 void Program::init(){
     machine.loadConfig("config.lua");
-    menuBarMap = machine.loadIntMatrix("menu_bar");
+    menuBarMap = machine.loadIntMatrix("menu_bar_tiles");
+    cursorTileRect = machine.loadTileRect("cursor_tiles");
 
     pos_x = (machine.w+tileW)/2;
     pos_y = (machine.h+tileH)/2;
@@ -33,7 +34,5 @@ void Program::draw() const {
 
     machine.drawTileMap(menuBarMap, 0, 0);
     machine.drawText("Revising SDL and C++", tileW, tileH/2);
-
-    // cursor
-    machine.drawSprite(1, machine.mouseX, machine.mouseY, 2, 2);
+    machine.drawSprite(cursorTileRect, machine.mouseX, machine.mouseY);
 }

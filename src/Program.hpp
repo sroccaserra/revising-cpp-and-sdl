@@ -1,7 +1,6 @@
 #ifndef __PROGRAM_HPP__
 #define __PROGRAM_HPP__
 
-#include <string>
 #include <vector>
 
 #include "Machine.hpp"
@@ -23,6 +22,7 @@ class Program {
         float pos_y;
 
         std::vector<std::vector<int>> menuBarMap;
+        TileRect cursorTileRect;
 };
 
 #endif // __PROGRAM_HPP__
