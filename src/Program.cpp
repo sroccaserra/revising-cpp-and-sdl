@@ -10,13 +10,7 @@ Program::~Program() { }
 void Program::init(){
     machine.loadConfig("config.lua");
 
-    std::vector<std::vector<int>> matrix = machine.loadIntMatrix("menu_bar");
-    for (auto& row : matrix) {
-        for(int n : row) {
-            std::cout << n << " ";
-        }
-        std::cout << "\n";
-    }
+    menuBarMap = machine.loadIntMatrix("menu_bar");
 
     pos_x = (machine.w+tileW)/2;
     pos_y = (machine.h+tileH)/2;
@@ -35,16 +29,14 @@ void Program::draw() const {
     const int nTilesW = machine.w / tileW;
     const int nTilesH = machine.h / tileH;
 
-    // draw corners
-    machine.drawBackground(1, 0, 0);
-    machine.drawBackground(3, (nTilesW-1)*tileW, 0);
-
-    // draw title bar
-    for (int j = 1; j < nTilesW-1; ++j) {
-        machine.drawBackground(2, j*tileW, 0);
-    }
-    for (int j = 0; j < nTilesW; ++j) {
-        machine.drawBackground(4, j*tileW, tileH);
+    int i = 0;
+    for (auto& row : menuBarMap) {
+        int j = 0;
+        for(int n : row) {
+            machine.drawBackground(n, j*tileW, i*tileH);
+            ++j;
+        }
+        ++i;
     }
 
     drawText("Revising SDL and C++", tileW, tileH/2);

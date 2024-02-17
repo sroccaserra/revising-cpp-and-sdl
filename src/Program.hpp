@@ -23,6 +23,8 @@ class Program {
 
         float pos_x;
         float pos_y;
+
+        std::vector<std::vector<int>> menuBarMap;
 };
 
 #endif // __PROGRAM_HPP__
