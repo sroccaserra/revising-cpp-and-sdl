@@ -4,7 +4,7 @@ To build and run, you might:
 make run
 ```
 
-![image](https://github.com/sroccaserra/revising-cpp-and-sdl/assets/7529/18d5eeca-d313-4434-b48d-3da99ec46228)
+![image](https://github.com/sroccaserra/revising-cpp-and-sdl/assets/7529/2d1b1848-ee7a-4807-8c00-2210775f5e6a)
 
 ## Requirements
 
