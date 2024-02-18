@@ -30,10 +30,7 @@ SdlMachine::SdlMachine(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
 
     framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, w, h);
-
-    loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, fontSheet);
-    loadSheet("images/spriteSheet.bmp", SDL_TRUE, spriteSheet);
-    loadSheet("images/backgroundSheet.bmp", SDL_FALSE, backgroundSheet);
+    loadTileSheets();
 
     SDL_ShowCursor(SDL_DISABLE);
 }
@@ -42,15 +39,27 @@ SdlMachine::~SdlMachine() {
     cleanUpSdl();
 }
 
-void SdlMachine::loadSheet(const std::string& path, const bool hasColorKey, TileSheet& sheet) {
+void SdlMachine::loadTileSheets() {
+    loadTileSheet("images/Atari_ST_character_set_8x8.bmp", fontSheet, true);
+    loadTileSheet("images/spriteSheet.bmp", spriteSheet, true);
+    loadTileSheet("images/backgroundSheet.bmp", backgroundSheet);
+}
+
+void SdlMachine::loadTileSheet(const std::string& path, TileSheet& sheet, const bool hasColorKey) {
+    if (nullptr != sheet.texture) {
+        SDL_DestroyTexture(sheet.texture);
+    }
+
     const auto image = SDL_LoadBMP(path.c_str());
     if (image == nullptr) {
         cleanUpSdl();
         const auto msg = (std::ostringstream() << SDL_GetError()).str();
         throw std::runtime_error(msg);
     }
-    const auto firstPixel = readFirstPixel(image);
-    SDL_SetColorKey(image, hasColorKey, firstPixel);
+    if (hasColorKey) {
+        const auto firstPixel = readFirstPixel(image);
+        SDL_SetColorKey(image, SDL_TRUE, firstPixel);
+    }
     sheet.texture = SDL_CreateTextureFromSurface(renderer, image);
     SDL_FreeSurface(image);
 

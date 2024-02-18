@@ -41,12 +41,13 @@ class SdlMachine : public Machine {
         }
 
         // SDL stuff
+        void loadTileSheets() override;
+        void loadTileSheet(const std::string& path, TileSheet& sheet, const bool hasColorKey = false);
+        const Uint32 readFirstPixel(SDL_Surface* surface) const;
         const Input processInput();
         void drawSdl() const;
-        void loadSheet(const std::string& path, const bool hasColorKey, TileSheet& sheet);
         void drawTileRectFromSheet(const TileSheet &sheet, const TileRect& rect, const float x, const float y) const;
         void drawTilesFromSheet(const TileSheet &sheet, const int n, const float x, const float y, const int nTilesW, const int nTilesH) const;
-        const Uint32 readFirstPixel(SDL_Surface* surface) const;
         void cleanUpSdl();
 
         SDL_Window* window;

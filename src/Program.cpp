@@ -11,10 +11,15 @@ void Program::init(){
     cursorTileRect = machine.loadTileRect("cursor_tiles");
 }
 
+void Program::reset() {
+    init();
+    machine.loadTileSheets();
+}
+
 void Program::update(const Input& input) {
     shouldQuit = input.shouldQuit;
     if (input.shouldReset) {
-        init();
+        reset();
     }
 }
 

@@ -19,6 +19,8 @@ class Program {
         bool shouldQuit;
 
     private:
+        void reset();
+
         Machine& machine;
 
         std::vector<std::vector<int>> menuBarMap;
