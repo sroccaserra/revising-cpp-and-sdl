@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Machine.hpp"
+#include "Input.hpp"
 
 class Program {
 
@@ -12,8 +13,10 @@ class Program {
         ~Program();
 
         void init();
-        void update();
+        void update(const Input& input);
         void draw() const;
+
+        bool shouldQuit;
 
     private:
         Machine& machine;

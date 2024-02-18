@@ -5,12 +5,17 @@ Program::Program(Machine& machine) : machine{machine} { }
 Program::~Program() { }
 
 void Program::init(){
+    shouldQuit = false;
     machine.loadConfig("config.lua");
     menuBarMap = machine.loadIntMatrix("menu_bar_tiles");
     cursorTileRect = machine.loadTileRect("cursor_tiles");
 }
 
-void Program::update() {
+void Program::update(const Input& input) {
+    shouldQuit = input.shouldQuit;
+    if (input.shouldReset) {
+        init();
+    }
 }
 
 void Program::draw() const {

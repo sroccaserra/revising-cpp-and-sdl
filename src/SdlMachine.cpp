@@ -80,29 +80,38 @@ void SdlMachine::run() {
 
     program->init();
 
-    while (!shouldQuit) {
-        processInput();
-        program->update();
+    while (!program->shouldQuit) {
+        const Input input = processInput();
+        program->update(input);
         drawSdl();
     }
 }
 
-void SdlMachine::processInput() {
+const Input SdlMachine::processInput() {
     SDL_GetMouseState(&mouseX, &mouseY);
     mouseX /= zoom;
     mouseY /= zoom;
+    Input result;
 
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
-            case SDL_KEYDOWN:
-            case SDL_MOUSEBUTTONDOWN:
             case SDL_WINDOWEVENT_CLOSE:
-                shouldQuit = true;
+                result.shouldQuit = true;
                 break;
+            case SDL_KEYUP:
+                switch (event.key.keysym.sym) {
+                    case SDLK_r:
+                        result.shouldReset = true;
+                        break;
+                    case SDLK_ESCAPE:
+                        result.shouldQuit = true;
+                        break;
+                }
         }
     }
+    return result;
 }
 
 void SdlMachine::drawTileRectFromSheet(const Sheet &sheet, const TileRect& tileRect, const float x, const float y) const {

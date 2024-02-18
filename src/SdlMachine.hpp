@@ -41,7 +41,7 @@ class SdlMachine : public Machine {
         }
 
         // SDL stuff
-        void processInput();
+        const Input processInput();
         void drawSdl() const;
         void loadSheet(const char* path, bool hasColorKey, Sheet* sheet);
         void drawTileRectFromSheet(const Sheet &sheet, const TileRect& rect, const float x, const float y) const;
@@ -59,7 +59,6 @@ class SdlMachine : public Machine {
 
         Uint8 bgColor[3] {0, 0, 0};
 
-        bool shouldQuit {false};
         int zoom;
 };
 
