@@ -6,7 +6,7 @@
 #include "Machine.hpp"
 #include "Program.hpp"
 
-struct Sheet {
+struct TileSheet {
     SDL_Texture* texture;
     int textureW;
     int textureH;
@@ -43,9 +43,9 @@ class SdlMachine : public Machine {
         // SDL stuff
         const Input processInput();
         void drawSdl() const;
-        void loadSheet(const char* path, bool hasColorKey, Sheet* sheet);
-        void drawTileRectFromSheet(const Sheet &sheet, const TileRect& rect, const float x, const float y) const;
-        void drawTilesFromSheet(const Sheet &sheet, const int n, const float x, const float y, const int nTilesW, const int nTilesH) const;
+        void loadSheet(const std::string& path, const bool hasColorKey, TileSheet& sheet);
+        void drawTileRectFromSheet(const TileSheet &sheet, const TileRect& rect, const float x, const float y) const;
+        void drawTilesFromSheet(const TileSheet &sheet, const int n, const float x, const float y, const int nTilesW, const int nTilesH) const;
         const Uint32 readFirstPixel(SDL_Surface* surface) const;
         void cleanUpSdl();
 
@@ -53,9 +53,9 @@ class SdlMachine : public Machine {
         SDL_Renderer* renderer;
         SDL_Texture* framebuffer;
 
-        Sheet fontSheet;
-        Sheet spriteSheet;
-        Sheet backgroundSheet;
+        TileSheet fontSheet;
+        TileSheet spriteSheet;
+        TileSheet backgroundSheet;
 
         Uint8 bgColor[3] {0, 0, 0};
 

@@ -31,9 +31,9 @@ SdlMachine::SdlMachine(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
     framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, w, h);
 
-    loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, &fontSheet);
-    loadSheet("images/spriteSheet.bmp", SDL_TRUE, &spriteSheet);
-    loadSheet("images/backgroundSheet.bmp", SDL_FALSE, &backgroundSheet);
+    loadSheet("images/Atari_ST_character_set_8x8.bmp", SDL_TRUE, fontSheet);
+    loadSheet("images/spriteSheet.bmp", SDL_TRUE, spriteSheet);
+    loadSheet("images/backgroundSheet.bmp", SDL_FALSE, backgroundSheet);
 
     SDL_ShowCursor(SDL_DISABLE);
 }
@@ -42,8 +42,8 @@ SdlMachine::~SdlMachine() {
     cleanUpSdl();
 }
 
-void SdlMachine::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
-    const auto image = SDL_LoadBMP(path);
+void SdlMachine::loadSheet(const std::string& path, const bool hasColorKey, TileSheet& sheet) {
+    const auto image = SDL_LoadBMP(path.c_str());
     if (image == nullptr) {
         cleanUpSdl();
         const auto msg = (std::ostringstream() << SDL_GetError()).str();
@@ -51,10 +51,10 @@ void SdlMachine::loadSheet(const char* path, bool hasColorKey, Sheet* sheet) {
     }
     const auto firstPixel = readFirstPixel(image);
     SDL_SetColorKey(image, hasColorKey, firstPixel);
-    sheet->texture = SDL_CreateTextureFromSurface(renderer, image);
+    sheet.texture = SDL_CreateTextureFromSurface(renderer, image);
     SDL_FreeSurface(image);
 
-    SDL_QueryTexture(sheet->texture, nullptr, nullptr, &sheet->textureW, &sheet->textureH);
+    SDL_QueryTexture(sheet.texture, nullptr, nullptr, &sheet.textureW, &sheet.textureH);
 }
 
 void SdlMachine::cleanUpSdl() {
@@ -114,7 +114,7 @@ const Input SdlMachine::processInput() {
     return result;
 }
 
-void SdlMachine::drawTileRectFromSheet(const Sheet &sheet, const TileRect& tileRect, const float x, const float y) const {
+void SdlMachine::drawTileRectFromSheet(const TileSheet &sheet, const TileRect& tileRect, const float x, const float y) const {
     const int pixelsW = tileRect.w*tileW;
     const int pixelsH = tileRect.h*tileH;
 
@@ -123,7 +123,7 @@ void SdlMachine::drawTileRectFromSheet(const Sheet &sheet, const TileRect& tileR
     SDL_RenderCopy(renderer, sheet.texture, &src, &dst);
 }
 
-void SdlMachine::drawTilesFromSheet(const Sheet &sheet, const int n, const float x, const float y,
+void SdlMachine::drawTilesFromSheet(const TileSheet &sheet, const int n, const float x, const float y,
         const int nTilesW, const int nTilesH) const {
     const int srcX = (n*tileW)%sheet.textureW;
     const int srcY = tileH*(n*tileW/sheet.textureW);
