@@ -24,6 +24,7 @@ class Program {
         Machine& machine;
 
         std::vector<std::vector<int>> menuBarMap;
+        std::vector<std::vector<int>> room_01;
         TileRect cursorTileRect;
 };
 
