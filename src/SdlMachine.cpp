@@ -4,6 +4,9 @@
 
 #include "SdlMachine.hpp"
 
+constexpr Uint32 fps = 60;
+constexpr Uint32 expectedFrameTime = 1000/fps;
+
 SdlMachine::SdlMachine(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
     if(0 == (SDL_WasInit(0) & SDL_INIT_VIDEO)) {
         auto msg = (std::ostringstream() << "SDL was not initialized.").str();
@@ -89,10 +92,17 @@ void SdlMachine::run() {
 
     program->init();
 
+    Uint32 previousFrame = SDL_GetTicks();
     while (!program->shouldQuit) {
         const Input input = processInput();
         program->update(input);
         drawSdl();
+
+        const Uint32 delta = SDL_GetTicks() - previousFrame;
+        previousFrame += delta;
+        if (delta < expectedFrameTime) {
+            SDL_Delay(expectedFrameTime-delta);
+        }
     }
 }
 
