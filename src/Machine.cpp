@@ -59,7 +59,7 @@ const TileRect Machine::loadTileRect(const std::string& name) const {
     return result;
 }
 
-const std::vector<std::vector<int>> Machine::loadIntMatrix(const std::string& name) const {
+const TileMap Machine::loadIntMatrix(const std::string& name) const {
     int startTop = lua_gettop(L);
 
     lua_getglobal(L, name.c_str());
@@ -79,7 +79,7 @@ const std::vector<std::vector<int>> Machine::loadIntMatrix(const std::string& na
     assert(0 < w);
     lua_pop(L, 2);
 
-    auto matrix = std::vector<std::vector<int>>();
+    auto matrix = TileMap();
 
     for (int i = 1; i<= h; ++i) {
         lua_geti(L, -1, i);
@@ -100,7 +100,7 @@ const std::vector<std::vector<int>> Machine::loadIntMatrix(const std::string& na
     return matrix;
 }
 
-void Machine::drawTileMap(const std::vector<std::vector<int>>& tileMap, const float x, const float y) const {
+void Machine::drawTileMap(const TileMap& tileMap, const float x, const float y) const {
     float i {y};
     for (auto& row : tileMap) {
         float j {x};

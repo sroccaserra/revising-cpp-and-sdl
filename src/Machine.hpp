@@ -8,6 +8,8 @@ extern "C" {
 #include <string>
 #include <vector>
 
+using TileMap = std::vector<std::vector<int>>;
+
 constexpr int tileW {8};
 constexpr int tileH {8};
 
@@ -34,12 +36,12 @@ class Machine {
 
         virtual void loadTileSheets() = 0;
 
-        void drawTileMap(const std::vector<std::vector<int>>& tileMap, const float x, const float y) const;
+        void drawTileMap(const TileMap& tileMap, const float x, const float y) const;
         void drawText(const std::string& text, const float x, const float y) const;
 
         void loadConfig(const std::string& filename);
         const TileRect loadTileRect(const std::string& name) const;
-        const std::vector<std::vector<int>> loadIntMatrix(const std::string& name) const;
+        const TileMap loadIntMatrix(const std::string& name) const;
 
         int w;
         int h;
