@@ -31,8 +31,8 @@ SdlMachine::SdlMachine(int w, int h, int zoom) : Machine(w, h), zoom {zoom} {
         throw std::runtime_error(msg);
     }
 
-    framebuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET, w, h);
+    SDL_RenderSetLogicalSize(renderer, w, h);
+
     loadTileSheets();
 
     SDL_ShowCursor(SDL_DISABLE);
@@ -70,9 +70,7 @@ void SdlMachine::loadTileSheet(const std::string& path, TileSheet& sheet, const 
 }
 
 void SdlMachine::cleanUpSdl() {
-    for (auto texture : {
-            fontSheet.texture, spriteSheet.texture, backgroundSheet.texture,
-            framebuffer}) {
+    for (auto texture : {fontSheet.texture, spriteSheet.texture, backgroundSheet.texture}) {
         if (texture != nullptr) {
             SDL_DestroyTexture(texture);
             texture = nullptr;
@@ -153,15 +151,7 @@ void SdlMachine::drawTilesFromSheet(const TileSheet &sheet, const int n, const f
 }
 
 void SdlMachine::drawSdl() const {
-    // Render to buffer
-    SDL_SetRenderTarget(renderer, framebuffer);
-
     program->draw();
-
-    // Render buffer
-    SDL_SetRenderTarget(renderer, nullptr);
-    const SDL_Rect windowDst {0, 0, w*zoom, h*zoom};
-    SDL_RenderCopy(renderer, framebuffer, nullptr, &windowDst);
 
     SDL_RenderPresent(renderer);
 }

@@ -52,7 +52,6 @@ class SdlMachine : public Machine {
 
         SDL_Window* window;
         SDL_Renderer* renderer;
-        SDL_Texture* framebuffer;
 
         TileSheet fontSheet;
         TileSheet spriteSheet;
